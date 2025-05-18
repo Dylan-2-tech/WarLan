@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <memory>  // For std::unique_ptr
+#include <algorithm>
 
 // Constructor: Initialize empty grid
 Map::Map(void): _grid(DEFAULT_WIDTH, std::vector<Pawn*>(DEFAULT_HEIGHT, nullptr)){}
@@ -21,7 +22,7 @@ void Map::display(void){
 }
 
 // Add a new pawn at (x, y)
-void Map::AddPawn(int x, int y) {
+void Map::AddPawn(char type, int x, int y) {
 
     // Checks if the positions (x, y) are inside the map
     if (x <= 1 || x > DEFAULT_WIDTH - 1 || y <= 1 || y > DEFAULT_HEIGHT - 1){
@@ -29,11 +30,34 @@ void Map::AddPawn(int x, int y) {
         return;
     }
 
-    // Create pawn (owned by '_pawns')
-    _pawns.push_back(std::make_unique<Pawn>(x, y));
-    
-    // Store raw pointer in grid for fast access
-    _grid[x][y] = _pawns.back().get();
+    // Create a pawn depending on it's type and add it to the the grid
+    switch(type){
+
+        case('C'):
+            _pawns.push_back(std::make_unique<Castle>(x, y));
+             // Store raw pointer in grid for fast access
+            _grid[x][y] = _pawns.back().get();
+            break;
+   
+        case('W'):
+            _pawns.push_back(std::make_unique<Warrior>(x, y));
+             // Store raw pointer in grid for fast access
+            _grid[x][y] = _pawns.back().get();
+            break;
+   
+        case('F'):
+            _pawns.push_back(std::make_unique<Farmer>(x, y));
+             // Store raw pointer in grid for fast access
+            _grid[x][y] = _pawns.back().get();
+            break;
+   
+        case('L'):
+            _pawns.push_back(std::make_unique<Lord>(x, y));
+             // Store raw pointer in grid for fast access
+            _grid[x][y] = _pawns.back().get();
+            break; 
+    }
+
 }
 
 // Move a pawn from (fromX, fromY) to (toX, toY)

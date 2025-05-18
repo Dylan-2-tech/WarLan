@@ -18,8 +18,9 @@ public:
     Pawn(); 
 
     // Constructor used by daugther class
-    Pawn(int power, int hp, int moves, int prod, int cost); // Method to take hp from the called instance of this class
+    Pawn(int power, int hp, int moves, int prod, int cost, int x, int y); 
 
+    // Method to take hp from the called instance of this class
     void loseHp(int damage);
 
     // Display stats
@@ -37,7 +38,7 @@ class Castle: public Pawn{
 public:
 
     // Castle Constructor using Pawn Constructor
-    Castle(void);
+    Castle(int x, int y);
 
     // override getChar to display his character
     void getChar() override;
@@ -48,7 +49,7 @@ class Warrior: public Pawn{
 public:
 
     // Warrior Constructor using Pawn Constructor
-    Warrior(void);
+    Warrior(int x, int y);
 
     // override getChar to display his character
     void getChar() override;
@@ -59,7 +60,7 @@ class Farmer: public Pawn{
 public:
 
     // Farmer Constructor using Pawn Constructor
-    Farmer(void);
+    Farmer(int x, int y);
 
     // override getChar to display his character
     void getChar() override;
@@ -70,7 +71,7 @@ class Lord: public Pawn{
 public:
 
     // Lord Constructor using Pawn Constructor
-    Lord(void);
+    Lord(int x, int y);
 
     // override getChar to display his character
     void getChar() override;

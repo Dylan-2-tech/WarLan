@@ -10,13 +10,10 @@ Pawn::Pawn(void){
     _moves = 0;
     _prod = 0;
     _cost = 0;
-
-    // Positions
-    int _x, _y;
 }
 
 // Constructor used by daugther class
-Pawn::Pawn(int power, int hp, int moves, int prod, int cost): _power(power), _hp(hp), _moves(moves), _prod(prod), _cost(cost) {}
+Pawn::Pawn(int power, int hp, int moves, int prod, int cost, int x, int y): _power(power), _hp(hp), _moves(moves), _prod(prod), _cost(cost) , _x(x), _y(y){}
 
 // Method to take hp from the called instance of this class
 void Pawn::loseHp(int damage){
@@ -36,43 +33,42 @@ void Pawn::setPosition(int toX, int toY){
 }
 
 
-
 //~~~~~~~~~~~~~~~~~~~CASTLE METHODS~~~~~~~~~~~~~~~~~~~~~~~~~~
-Castle::Castle(void): Pawn(0, 20, 0, 2, 15){}
+Castle::Castle(int x, int y): Pawn(0, 20, 0, 2, 15, x, y){}
 
 void Castle::getChar(void){
     /*
-        * ESC[background_colour;Text_colourm output ESC[m
+        * ESC[Text_colour;background_colourm output ESC[m
     */
-    printf("\033[35;106mC\033[m");
+    printf("\033[0;100mC\033[m");
 }
 
 //~~~~~~~~~~~~~~~~~~~WARRIOR METHODS~~~~~~~~~~~~~~~~~~~~~~~~~~
-Warrior::Warrior(void): Pawn(5, 10, 3, 0, 10){}
+Warrior::Warrior(int x, int y): Pawn(5, 10, 3, 0, 10, x, y){}
 
 void Warrior::getChar(void){
     /*
-        * ESC[background_colour;Text_colourm output ESC[m
+        * ESC[Text_colour;background_colourm output ESC[m
     */
-    printf("\033[35;106mW\033[m");
+    printf("\033[0;41mW\033[m");
 }
 
 //~~~~~~~~~~~~~~~~~~~FARMER METHODS~~~~~~~~~~~~~~~~~~~~~~~~~~
-Farmer::Farmer(void): Pawn(0, 1, 2, 5, 20){}
+Farmer::Farmer(int x, int y): Pawn(0, 1, 2, 5, 20, x, y){}
 
 void Farmer::getChar(void){
     /*
-        * ESC[background_colour;Text_colourm output ESC[m
+        * ESC[Text_colour;background_colourm output ESC[m
     */
-    printf("\033[35;106mF\033[m");
+    printf("\033[30;43mF\033[m");
 }
 
 //~~~~~~~~~~~~~~~~~~~LORD METHODS~~~~~~~~~~~~~~~~~~~~~~~~~~
-Lord::Lord(void): Pawn(3, 5, 1, 0, 10){}
+Lord::Lord(int x, int y): Pawn(3, 5, 1, 0, 10, x, y){}
 
 void Lord::getChar(void){
     /*
-        * ESC[background_colour;Text_colourm output ESC[m
+        * ESC[Text_colour;background_colourm output ESC[m
     */
-    printf("\033[35;106mL\033[m");
+    printf("\033[30;107mL\033[m");
 }

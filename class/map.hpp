@@ -23,7 +23,7 @@ public:
     void display(void);
    
     // Add a new pawn at (x, y)
-    void AddPawn(int x, int y);
+    void AddPawn(char type, int x, int y);
 
     // Move a pawn from (fromX, fromY) to (toX, toY)
     bool MovePawn(int fromX, int fromY, int toX, int toY);
