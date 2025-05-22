@@ -13,7 +13,9 @@ Pawn::Pawn(void){
 }
 
 // Constructor used by daugther class
-Pawn::Pawn(int power, int hp, int moves, int prod, int cost, int x, int y): _power(power), _hp(hp), _moves(moves), _prod(prod), _cost(cost) , _x(x), _y(y){}
+Pawn::Pawn(int power, int hp, int moves, int prod, int cost, int x, int y): _power(power), _hp(hp), _moves(moves), _prod(prod), _cost(cost){
+    setPosition(x,y);
+}
 
 // Method to take hp from the called instance of this class
 void Pawn::loseHp(int damage){
@@ -28,8 +30,13 @@ void Pawn::display(void){
 }
 
 void Pawn::setPosition(int toX, int toY){
-    this -> _x = toX;
-    this -> _y = toY;
+    this -> _pos.x = toX;
+    this -> _pos.y = toY;
+}
+
+// Get The position
+Position Pawn::getPosition(void){
+    return this -> _pos;
 }
 
 

@@ -14,6 +14,8 @@ void Map::display(void){
         for (int j = 0; j < DEFAULT_HEIGHT; j++){
             if (_grid[i][j])
                 _grid[i][j] -> getChar();
+            else if(i == 0 || j == 0 || i == DEFAULT_WIDTH - 1 || j == DEFAULT_HEIGHT - 1)
+                printf("#");
             else
                 printf(".");
         }
@@ -77,6 +79,7 @@ bool Map::MovePawn(int fromX, int fromY, int toX, int toY) {
 
     // Update pawn's internal position
     pawn->setPosition(toX, toY);
+
     return true;
 }
 

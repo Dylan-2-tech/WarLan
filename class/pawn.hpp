@@ -1,6 +1,11 @@
 #ifndef PAWN_GAME_2727
 #define PAWN_GAME_2727
 
+typedef struct Position{
+    int x;
+    int y;
+}position;
+
 // Mother Class of Pawn
 class Pawn{
 private:
@@ -10,7 +15,7 @@ private:
     int _moves;
     int _prod;
     int _cost;
-    int _x, _y;
+    position _pos;
 
 public:
 
@@ -28,6 +33,10 @@ public:
 
     // Set the position of a Pawn
     void setPosition(int toX, int toY);
+
+    // Get The position
+    Position getPosition(void);
+
 
     // Virtual methods that returns the character of the specific pawn
     virtual void getChar() = 0;

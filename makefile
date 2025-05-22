@@ -1,32 +1,23 @@
-# Compiler and flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++17
+CXXFLAGS = -std=c++17 -pthread -Wall -Wextra -I./network -I./class 
+LDFLAGS = -lenet
+SRC = main.cpp \
+      network/client.cpp \
+      network/server.cpp \
+      class/pawn.cpp \
+      class/map.cpp
 
-# Source and object files
-SRCDIR = .
-CLASSDIR = class
-OBJDIR = obj
-
-SOURCES = $(SRCDIR)/main.cpp $(CLASSDIR)/pawn.cpp $(CLASSDIR)/map.cpp
-OBJECTS = $(patsubst %.cpp,$(OBJDIR)/%.o,$(notdir $(SOURCES)))
-
+OBJ = $(SRC:.cpp=.o)
 TARGET = main
 
-# Create object directory if it doesn't exist
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(OBJDIR)
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CXX) $(OBJ) -o $@ $(LDFLAGS)
+
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(CLASSDIR)/%.cpp
-	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Build target
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-# Clean build files
-.PHONY: clean
 clean:
-	rm -rf $(OBJDIR) *.o $(TARGET)
+	rm -f $(OBJ) $(TARGET)
 
