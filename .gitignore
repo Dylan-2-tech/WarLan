@@ -2,3 +2,4 @@ projet-guerre.pdf
 tests/
 obj/
 test_lan/
+*.o

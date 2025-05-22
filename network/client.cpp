@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include "map.hpp" 
 
 extern "C" {
     #include <enet/enet.h>
@@ -8,6 +9,10 @@ extern "C" {
 #include "network.hpp"
 
 void startClient(void){
+
+    // Map du jouer/client
+    Map * map = new Map;
+
 
     ENetHost* client = enet_host_create(nullptr, 1, 2, 0, 0);
     if (!client) {
@@ -24,19 +29,59 @@ void startClient(void){
         std::cerr << "Connection failed.\n";
         return;
     }
+    /* Wait up to 5 seconds for the connection attempt to succeed. */
+    ENetEvent event = {};
+    if (enet_host_service(client, &event, 5000) > 0 &&
+        event.type == ENET_EVENT_TYPE_CONNECT)
+    {
+        std::cout << "Got a connection!\n";
 
-    ENetEvent event;
-    if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
-        std::cout << "Connected to server.\n";
+        while (true)
+        {
 
-        const char* msg = "Hello from C++ client!";
-        ENetPacket* packet = enet_packet_create(msg, std::strlen(msg) + 1, ENET_PACKET_FLAG_RELIABLE);
-        enet_peer_send(peer, 0, packet);
-        enet_host_flush(client);
-    } else {
-        std::cerr << "Could not connect to server.\n";
+            ENetEvent event;
+            /* Wait up to 10 milliseconds for an event. */
+            while (enet_host_service(client, &event, 10) > 0)
+            {
+                switch (event.type)
+                {
+                case ENET_EVENT_TYPE_CONNECT:
+                break;
+
+                case ENET_EVENT_TYPE_RECEIVE:
+                    printf("A packet of length %lu containing %s was received on channel %u.\n",
+                        event.packet->dataLength,
+                        event.packet->data,
+                        event.channelID);
+
+                    // Parse data
+                    
+
+                    /* Clean up the packet now that we're done using it. */
+                    enet_packet_destroy(event.packet);
+                break;
+
+                case ENET_EVENT_TYPE_DISCONNECT:
+                    std::cout << "Server Disconected\n";
+                    break;
+                }
+            }
+
+            //do other stuff
+            std::cout << "Entrez un message: ";
+            std::string message = "";
+            std::cin >> message;
+
+            if (message != "")
+                sendMessage(peer, message.c_str());
+        }
+    }
+    else
+    {
+        std::cout << "Wasn't able to connect\n";
     }
 
+    enet_peer_reset(peer);
     enet_host_destroy(client);
     return;
 }

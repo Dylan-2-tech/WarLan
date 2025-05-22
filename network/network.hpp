@@ -6,10 +6,13 @@ extern "C" {
 }
 
 // Launch the server
-void startServer(void);
+void* startServer(void *arg);
 
 // Launch the client
 void startClient(void);
+
+// Send a Message to the server
+void sendMessage(ENetPeer* to, const char * message);
 
 
 #endif // NETWORK_HPP_2727

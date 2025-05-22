@@ -2,14 +2,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <thread>
+#include <pthread.h>
 
 extern "C" {
     #include <enet/enet.h>
 }
 
 #include "network/network.hpp"
-
 
 int main(void) {
     
@@ -31,13 +30,21 @@ int main(void) {
     // Initialize the server if the player has choosed server
     if (answer == 's'){
         
-        pthread_t serverThread;
-
-
         // Launch the server on a thread then launch the client
-        startServer();
+        pthread_t serverThread;
+        if (pthread_create(&serverThread, NULL, startServer, NULL) != 0){
+            fprintf(stderr, "Erreur lors de la création du thread du serveur\n");
+            exit(EXIT_FAILURE);
+        }
+        
 
         startClient();
+         
+        // Join
+        if( pthread_join(serverThread, NULL) != 0){
+            fprintf(stderr, "Erreur lors du join du thread du serveur\n");
+            exit(EXIT_FAILURE);
+        }
         return 0;
     }
     else{
