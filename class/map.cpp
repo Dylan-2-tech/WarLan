@@ -63,19 +63,20 @@ void Map::AddPawn(char type, int x, int y) {
 }
 
 // Move a pawn from (fromX, fromY) to (toX, toY)
-bool Map::MovePawn(int fromX, int fromY, int toX, int toY) {
+bool Map::MovePawn(Pawn* pawn, int toX, int toY) {
     // Check if the target cell is empty
     if (_grid[toX][toY] != nullptr) {
         return false;  // Move failed (cell occupied)
     }
 
-    // Get the pawn
-    Pawn* pawn = _grid[fromX][fromY];
-    if (!pawn) return false;  // No pawn at source
+    // Verify if the pawn can do the move tox and toy
+    
+    // get pawn positions
+    int px=pawn._x, py=pawn._y;
 
     // Update grid
     _grid[toX][toY] = pawn;
-    _grid[fromX][fromY] = nullptr;
+    _grid[px][py] = nullptr;
 
     // Update pawn's internal position
     pawn->setPosition(toX, toY);
@@ -106,4 +107,15 @@ void Map::RemovePawn(int x, int y) {
 
     // Clear grid pointer
     _grid[x][y] = nullptr;
+}
+
+
+// Get the _grid
+std::vector<std::vector<Pawn*>> get_grid(void){
+    return this -> _grid;
+}
+
+// Get the _pawns
+std::vector<std::unique_ptr<Pawn>> get_pawns(void){
+    return this -> _pawns;
 }

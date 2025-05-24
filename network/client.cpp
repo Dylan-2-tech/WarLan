@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "map.hpp" 
 
 extern "C" {
@@ -8,11 +9,7 @@ extern "C" {
 
 #include "network.hpp"
 
-void startClient(void){
-
-    // Map du jouer/client
-    Map * map = new Map;
-
+void startClient(int j){
 
     ENetHost* client = enet_host_create(nullptr, 1, 2, 0, 0);
     if (!client) {
@@ -35,6 +32,22 @@ void startClient(void){
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Got a connection!\n";
+        // Map du jouer/client
+        Map * map = new Map;
+         
+        if(j == 0){ // If the player is the host of the game
+            
+            // Adding the Castle and the farmer
+            map->AddPawn('C', 10, 19);
+            map->AddPawn('F', 10, 17);
+        }
+        else{ // If the player has joined the game
+     
+            // Adding the Castle and the farmer
+            map->AddPawn('C', 10, 3);
+            map->AddPawn('F', 10, 5);       
+        }
+
 
         while (true)
         {
@@ -48,17 +61,10 @@ void startClient(void){
                 case ENET_EVENT_TYPE_CONNECT:
                 break;
 
-                case ENET_EVENT_TYPE_RECEIVE:
-                    printf("A packet of length %lu containing %s was received on channel %u.\n",
-                        event.packet->dataLength,
-                        event.packet->data,
-                        event.channelID);
-
-                    // Parse data
+                case ENET_EVENT_TYPE_RECEIVE: // If the server has sent actions
+                    // Determine the action to do
+                        std::cout << event.packet->data;
                     
-
-                    /* Clean up the packet now that we're done using it. */
-                    enet_packet_destroy(event.packet);
                 break;
 
                 case ENET_EVENT_TYPE_DISCONNECT:
@@ -66,14 +72,25 @@ void startClient(void){
                     break;
                 }
             }
+            
+            //#### Actions that the player has to do ####
+            
+            for (auto &pawn : map->_pawns){ // For every pawn
+                
+                // Ask the position where to move the pawn
+                int x,y;
+                // Moves the pawn
+                do{
+                std::cout << "Entrez la position (xy):";
+                std::cin >> x >> y;
+                }while(!map->MovePawn(pawn, x, y));
 
-            //do other stuff
-            std::cout << "Entrez un message: ";
-            std::string message = "";
-            std::cin >> message;
-
-            if (message != "")
-                sendMessage(peer, message.c_str());
+                // Send to the server the action played by the player
+                std::string str_action = "M "+to_string(pawn->getPosition().x)+" "+ to_string(pawn->getPosition().y)+" "+
+                to_string(x)+" "+to_string(y);
+                
+                sendMessage(peer, str_action.c_str());
+            }
         }
     }
     else
